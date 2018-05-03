@@ -15,12 +15,6 @@ use yii\widgets\ActiveForm;
 //unlink($url);
 ?>
 
-<?php
-	if($model->file) { ?>
-	<img src="images/<?= $model->file?>" alt="" width="200px">
-<?php }
-echo $model->file;
-?>
 <?php $form = ActiveForm::begin([
 		'id'=>'main',
 ]) ?>
@@ -32,18 +26,20 @@ echo $model->file;
 	<div class="images">
 		<?php
 		$images = \app\models\Image::find()->all();
-
+		if (count($images) == 0) {
+			echo "Изображений не найдено";
+		}
 		foreach ($images as $image) {
 			?>
-			<div class="myimg">
-				<?php
-					echo "Id: ".$image->id."<br>";
-					echo "Имя <p id='imgName' data-id='$image->id'>".$image->title."</p>";
-				 ?>
-				<img src="images/<?= $image->name ?>" alt="" width="200px" height="200px"> <br>
-				<?php
-					echo "Описание: ".$image->description."<br>
-					<a href='#' data-id='$image->id' id='deleteimg'>Удалить</a><br>
+		<div class="myimg">
+			<?php
+			echo "Id: " . $image->id . "<br>";
+			echo "Имя <p id='imgName' data-id='$image->id'>" . $image->title . "</p>";
+			?>
+			<img src="images/<?= $image->name ?>" alt="" width="200px" height="200px"> <br>
+			<?php
+			echo "Описание: " . $image->description . "<br>
+			<a href='#' data-id='$image->id' id='deleteimg'>Удалить</a><br>
 			</div>";
 		} ?>
 	</div>

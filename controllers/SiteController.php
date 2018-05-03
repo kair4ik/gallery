@@ -155,6 +155,7 @@ class SiteController extends Controller
 	public function actionRemoveImage(){
     	$img = Image::findOne(['id'=>$_POST['id']]);
     	if ($img->delete()) {
+			$img->deleteFile();
 			return "success";
 		}
 	}

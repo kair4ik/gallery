@@ -68,4 +68,14 @@ class Image extends \yii\db\ActiveRecord
 	public static function getLastImageUrl($imgName){
 		return 'images/'.$imgName;
 	}
+
+	public function deleteFile(){
+		$filename = 'images/'.$this->name;
+		if (file_exists($filename)) {
+			unlink($filename);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

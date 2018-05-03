@@ -7,7 +7,6 @@ use yii\web\View;
 
 $this->title = 'My Yii Application';
 
-
 $imgName = Image::getLastImage();
 $urlImg = Image::getLastImageUrl($imgName);
 ?>
