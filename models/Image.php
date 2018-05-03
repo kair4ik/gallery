@@ -59,4 +59,13 @@ class Image extends \yii\db\ActiveRecord
 			return false;
 		}
 	}
+
+	public static function getLastImage(){
+    	$img = self::find()->orderBy('id DESC')->one();
+    	return $img->name;
+	}
+
+	public static function getLastImageUrl($imgName){
+		return 'images/'.$imgName;
+	}
 }

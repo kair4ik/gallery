@@ -120,7 +120,7 @@ a.desc:after {
     height: 200px;
     border: 1px solid black;
     border-radius: 10px;
-    background: url('../images/catty.jpg') no-repeat;
+    /*background: url('../images/catty.jpg') no-repeat;*/
     background-position:center;
     background-size: 200px;
     text-align: center;

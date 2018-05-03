@@ -11,6 +11,8 @@
 use yii\web\View;
 use yii\widgets\ActiveForm;
 
+
+//unlink($url);
 ?>
 
 <?php
@@ -63,6 +65,9 @@ $script = <<<JS
 					success: function(data) {
 						var response = JSON.parse(data);
 						if (response.status == "success"){
+							$(".images").prepend("<div class=\"myimg\">" +
+							 "<img src=\"images/"+ response.text +"\" width=\"200px\" height=\"200px\">" +
+							  "</div>");
 							console.log("Картинка успешно загружена");
 						}
 					}
