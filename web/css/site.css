@@ -126,14 +126,25 @@ a.desc:after {
     text-align: center;
 }
 
-div.images{
-    /*width: 800px;*/
-    /*height: 500px;*/
-    white-space:nowrap
+div.images, .jumbotron{
+    white-space:nowrap;
 }
 
-div.myimg{
+div.myimg, #folder{
     border: 1px solid black;
     margin: 10px;
     float: left;
+}
+
+.link{
+    display: inline-block;
+    height: auto;
+    width: auto;
+    padding-left:10px;
+    padding-right:10px;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-radius: 5px;
+    border: 3px solid black;
+    background: white;
 }

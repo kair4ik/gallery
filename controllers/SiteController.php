@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Folder;
 use app\models\Image;
 use Yii;
 use yii\filters\AccessControl;
@@ -133,10 +134,12 @@ class SiteController extends Controller
 		$model = new Image();
 		if(Yii::$app->request->isPost){
 			$model->file = UploadedFile::getInstance($model, 'file');
+			$model->folder = $_GET['folder'];
 			$model->name = $model->title = $model->upload();
+			$model->description = "Описание";
 			if ($model->save()) {
 				$response['status'] = "success";
-				$response['text'] = $model->name;
+				$response['text'] = $model;
 				return Json::encode($response);
 			}
 		}
@@ -146,10 +149,26 @@ class SiteController extends Controller
 
 	public function actionEditName(){
     	$img = Image::findOne(['id'=>$_POST['id']]);
-    	$img->title = $_POST['newname'];
-    	if ($img->save()){
-    		return "success";
+    	$newName = $_POST['newname'];
+    	if ($newName !== $img->title) {
+			$img->title = $newName;
+			if ($img->save()){
+				return "success";
+			}
 		}
+
+	}
+
+	public function actionEditDesc(){
+		$img = Image::findOne(['id'=>$_POST['id']]);
+		$newDesc = $_POST['newdesc'];
+		if ($newDesc !== $img->description) {
+			$img->description = $newDesc;
+			if ($img->save()){
+				return "success";
+			}
+		}
+
 	}
 
 	public function actionRemoveImage(){
@@ -157,6 +176,21 @@ class SiteController extends Controller
     	if ($img->delete()) {
 			$img->deleteFile();
 			return "success";
+		}
+	}
+
+	public function actionCreateFolder(){
+    	$folderName = $_POST['folderName'];
+		$folder = new Folder();
+		if ($folderName){
+			$folder->name = $folderName;
+			if ($folder->create()){
+				$response['status'] = "success";
+				$response['text'] = $folderName;
+				return Json::encode($response);
+			}
+		}else {
+			return "не передано имя папки";
 		}
 	}
 }

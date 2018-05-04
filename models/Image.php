@@ -12,6 +12,7 @@ use yii\web\UploadedFile;
  * @property string $title
  * @property string $name
  * @property string $description
+ * @property string $folder
  */
 class Image extends \yii\db\ActiveRecord
 {
@@ -31,7 +32,7 @@ class Image extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'name', 'description'], 'string', 'max' => 50],
+            [['title', 'name', 'description', 'folder'], 'string', 'max' => 50],
 			[['file'], 'file', 'extensions' => 'png, jpg'],
         ];
     }
@@ -46,12 +47,13 @@ class Image extends \yii\db\ActiveRecord
             'title' => 'Title',
             'name' => 'Name',
             'description' => 'Description',
+            'folder' => 'Folder',
         ];
     }
 
 	public function upload() {
 		if ($this->validate()) {
-			$this->file->saveAs("images/{$this->file->baseName}.{$this->file->extension}");
+			$this->file->saveAs("images/{$this->folder}/{$this->file->baseName}.{$this->file->extension}");
 			$name = $this->file->baseName.".".$this->file->extension;
 			$this->file = "";
 			return $name;
@@ -60,9 +62,13 @@ class Image extends \yii\db\ActiveRecord
 		}
 	}
 
-	public static function getLastImage(){
-    	$img = self::find()->orderBy('id DESC')->one();
-    	return $img->name;
+	public static function getLastImage($folder){
+    	$img = self::find()->where(['folder'=>$folder])->orderBy('id DESC')->one();
+    	if (isset($img)){
+			return $img->name;
+		} else {
+    		return false;
+		}
 	}
 
 	public static function getLastImageUrl($imgName){
