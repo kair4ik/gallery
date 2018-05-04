@@ -114,7 +114,7 @@ a.desc:after {
     outline: none;
 }
 
-#folder {
+.folder {
     position: center;
     width: 200px;
     height: 200px;
@@ -130,7 +130,7 @@ div.images, .jumbotron{
     white-space:nowrap;
 }
 
-div.myimg, #folder{
+div.myimg, .folder{
     border: 1px solid black;
     margin: 10px;
     float: left;

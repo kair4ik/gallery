@@ -65,7 +65,7 @@ class Image extends \yii\db\ActiveRecord
 	public static function getLastImage($folder){
     	$img = self::find()->where(['folder'=>$folder])->orderBy('id DESC')->one();
     	if (isset($img)){
-			return $img->name;
+			return $folder."/".$img->name;
 		} else {
     		return false;
 		}
@@ -76,7 +76,7 @@ class Image extends \yii\db\ActiveRecord
 	}
 
 	public function deleteFile(){
-		$filename = 'images/'.$this->name;
+		$filename = 'images/'.$this->folder."/".$this->name;
 		if (file_exists($filename)) {
 			unlink($filename);
 			return true;

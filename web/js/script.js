@@ -154,10 +154,58 @@ function newFolder() {
 			if (response.status == "success"){
 				console.log("Папка успешно создана");
 				$("div .jumbotron").append(
-					"<div id=\"folder\">" +
-					"<a class=\"link\" href=\"/projects/gallery/web/index.php?r=site/upload&folder=\"\"+folderName+\">"+folderName+"</a>" +
+					"<div class=\"folder\" id=\"folder"+response.text+"\">" +
+					"<a class=\"link\" id=\"folderName"+response.text+"\" href=\"/projects/gallery/web/index.php?r=site/upload&folder="+response.foldername+"\">Перейти в папку "+folderName+"</a>" +
+					"<br><button onclick='renameFolder("+response.text+")'>Редактировать</button>" +
+					"<br><button onclick=\"deleteFolder("+response.text+")\">Удалить</button>" +
 					"</div>"
 				);
+			}
+		},
+		error: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+
+function setFonImages() {
+	$.ajax({
+		url: 'index.php?r=site/get-fon-images',
+		beforeSend: function (msg) {
+			// alert("Картинка скоро будет удалена");
+		},
+		success: function(data) {
+			var response = JSON.parse(data);
+			console.log(response);
+			for (key in response) {
+				var id = response[key].id;
+				var path = response[key].path;
+				console.log(id);
+				console.log(path);
+				$('#'+id).css('background-image','url("' +path+'")');
+			}
+		},
+		error: function(data) {
+			console.log(data);
+		}
+	});
+}
+
+function deleteFolder(id){
+	$.ajax({
+		url: 'index.php?r=site/delete-folder&id='+id,
+		beforeSend: function (msg) {
+			// alert("Картинка скоро будет удалена");
+		},
+		success: function(data) {
+
+			if (data == "success") {
+				console.log("Папка удалена");
+				$("#folder"+id).remove();
+			}
+			if (data == "error") {
+				alert("Мы можем удалить только пустой каталог");
 			}
 
 		},
@@ -167,29 +215,25 @@ function newFolder() {
 	});
 }
 
-function setImageForFolder(id,folderName) {
+function renameFolder(id){
+	var folderName = prompt('Введите имя папки', '');
 
-	imageUrl = '../images/catty.jpg';
-	$('#folder').css('background-image','url("' +imageUrl+'")');
-}
-
-function setFonImages() {
 	$.ajax({
-		url: 'index.php?r=site/create-folder',
+		url: 'index.php?r=site/rename-folder&id='+id,
 		type: 'post',
 		data: {folderName:folderName},
 		beforeSend: function (msg) {
 			// alert("Картинка скоро будет удалена");
 		},
 		success: function(data) {
-			var response = JSON.parse(data);
-			if (response.status == "success"){
-				console.log("Папка успешно создана");
-				$("div .jumbotron").append(
-					"<div id=\"folder\">" +
-					"<a class=\"link\" href=\"/projects/gallery/web/index.php?r=site/upload&folder=\"\"+folderName+\">"+folderName+"</a>" +
-					"</div>"
-				);
+
+			if (data == "success") {
+				console.log("Папка переименована");
+				$("#folderName"+id).html("Перейти в папку "+folderName);
+				$("#folderName"+id).attr("href","/projects/gallery/web/index.php?r=site%2Fupload&folder="+folderName);
+			}
+			if (data == "error") {
+				alert("Мы можем удалить только пустой каталог");
 			}
 
 		},
@@ -198,3 +242,4 @@ function setFonImages() {
 		}
 	});
 }
+

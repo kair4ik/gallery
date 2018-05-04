@@ -50,4 +50,26 @@ class Folder extends \yii\db\ActiveRecord
 			return true;
 		}
 	}
+
+	public function renameFolder($newName){
+		$filename = 'images/'.$this->name;
+		if (rename($filename,'images/'.$newName)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function deleteFolder(){
+		$filename = 'images/'.$this->name;
+		if (file_exists($filename)) {
+			if (rmdir($filename)){
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 }

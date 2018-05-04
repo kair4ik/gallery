@@ -20,9 +20,11 @@ $urlImg = "ggg";
 		<?php
 		$folders = \app\models\Folder::find()->all();
 		foreach ($folders as $folder){
-			echo "<div id=\"folder".$folder->id."\">";
-			$url = \yii\helpers\Url::to(['/site/upload', 'folder' => $folder->name]);
-				echo \yii\helpers\Html::a($folder->name, $url,['class'=>'link']);
+			echo "<div class=\"folder\" id=\"folder".$folder->id."\">";
+				$url = \yii\helpers\Url::to(['/site/upload', 'folder' => $folder->name]);
+				echo \yii\helpers\Html::a("Перейти в папку ".$folder->name, $url,['class'=>'link','id'=>'folderName'.$folder->id]);
+				echo "<br><button onclick='renameFolder(".$folder->id.")'>Редактировать</button>";
+				echo "<br><button onclick='deleteFolder(".$folder->id.")'>Удалить</button>";
 			echo "</div>";
 		}
 		?>
@@ -32,21 +34,9 @@ $urlImg = "ggg";
 </div>
 
 
-<!--<div id="folder">-->
-<!--	<a class="link" href="/projects/gallery/web/index.php?r=site/upload&folder=fff">fff</a>-->
-<!--</div>-->
-
 <?php
 $script = <<<JS
-	var arr = ["Яблоко", "Апельсин", "Груша"];
-	
-	arr.forEach(function(item, i, arr) {
-	  alert( i + ": " + item + " (массив:" + arr + ")" );
-	});
-	
-	
-
-	
+	setFonImages();
 JS;
 $this->registerJs($script, View::POS_END);
 ?>

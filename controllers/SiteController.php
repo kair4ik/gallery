@@ -186,11 +186,50 @@ class SiteController extends Controller
 			$folder->name = $folderName;
 			if ($folder->create()){
 				$response['status'] = "success";
-				$response['text'] = $folderName;
+				$response['text'] = $folder->id;
+				$response['foldername'] = $folder->name;
 				return Json::encode($response);
 			}
 		}else {
 			return "не передано имя папки";
+		}
+	}
+
+	public function actionGetFonImages(){
+    	$folders = Folder::find()->all();
+    	$arr = [];
+    	foreach ($folders as $folder){
+    		$arr[$folder->id]['id'] = "folder".$folder->id;
+    		$arr[$folder->id]['image'] = Image::getLastImage($folder->name);
+    		$arr[$folder->id]['path'] = Image::getLastImageUrl($arr[$folder->id]['image']);
+		}
+		return Json::encode($arr);
+	}
+
+	public function actionRenameFolder($id){
+		$folder = Folder::findOne(['id'=>$id]);
+		$images = Image::findAll(['folder'=>$folder->name]);
+		foreach ($images as $image){
+			$image->folder = $_POST['folderName'];
+			$image->save();
+		}
+		$folder->renameFolder($_POST['folderName']);
+		$folder->name = $_POST['folderName'];
+		if ($folder->save()){
+
+			return "success";
+		} else {
+			return "error";
+		}
+	}
+
+	public function actionDeleteFolder($id){
+		$folder = Folder::findOne(['id'=>$id]);
+		if ($folder->deleteFolder()){
+			$folder->delete();
+			return "success";
+		} else {
+			return "error";
 		}
 	}
 }
